@@ -7,7 +7,7 @@ This GitHub repository provides the code explained in the following manuscript:
 I recommend to first read the manuscript before using the code. 
 
 ## Data
-This project requires raw data to be downloaded from the [Health and Retirement Study (HRS) platform for researchers](https://hrs.isr.umich.edu/). The daw data required for segmentation are public datasets, accessable to all persons with a registered HRS user account. Detailed instructions on downloading the data can be found in the first script of the first section in the project __01_Population_Segmentation__, called __01_Data_Extraction.ipynb__.
+This project requires raw data to be downloaded from the [Health and Retirement Study (HRS) platform for researchers](https://hrs.isr.umich.edu/). The raw data required for segmentation are public datasets, accessable to all persons with a registered HRS user account. Detailed instructions on downloading the data can be found in the first script of the first section in the project __01_Population_Segmentation__, called __01_Data_Extraction.ipynb__.
 
 ## 01_Population_Segmentation
 This first section adapts a validated instrument for segmenting individuals by distinct, homogenous health and health-related social service needs to the Health and Retirement Study (HRS), a nationally representative survey dataset from the US population aged 50 years and older.
