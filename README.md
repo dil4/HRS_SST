@@ -16,7 +16,5 @@ The second section section estimates the one-year transition probabilities acros
 
 The "***.R" file has the same code included in the appendix of the paper. The Markdown folder contains a more detailed description of the method and evaluation.
 
-All code is explained in more detail in the markdown PDF (link to PDF).
-
 # Full list of contributors:
 [Authors]
