@@ -12,12 +12,12 @@ This project requires raw data to be downloaded from the [Health and Retirement 
 ## 01_Population_Segmentation
 This first section adapts a validated instrument for segmenting individuals by distinct, homogenous health and health-related social service needs to the Health and Retirement Study (HRS), a nationally representative survey dataset from the US population aged 50 years and older.
 
-The "***.ipynb" files are the same code included in the appendix of the paper. The code was written in Jupyter Notebook in a markdown format. 
+The _.ipynb_ files are the same code included in the appendix of the paper. The code was written in Jupyter Notebook in a markdown format. 
 
 ## 02_Transition_Probability_Estimation
 The second section section of the project estimates the one-year transition probabilities across all 10 need states and death using multi-state modelling.
 
-The "***.R" files have the same code included in the appendix of the paper. The code was written in R with .
+The _.R_ files have the same code included in the appendix of the paper. The code was written in RStudio.
 
 # Full list of contributors:
 [Authors]
