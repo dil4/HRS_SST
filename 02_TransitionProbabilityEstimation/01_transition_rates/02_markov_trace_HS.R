@@ -82,7 +82,7 @@ load("~/Health_and_Retirement_Study/HRS_markov/00_data/data_msm_HS.RData")
 ###### Select age to investigate
 
 agex <- c(50:120)
-int_wavex <- c(9)
+int_wavex <- c(8)
 HSx <- c(1:10)
 
 
@@ -133,6 +133,7 @@ q <- q %>%
   select(int_op, HS, HS_tot) %>%
   ungroup()
 
+
 #create new dataset with only deatHS as deatHS need to be reported cumulatively
 #and remove deatHS from original dataset
 q11 <- q[q$HS==11,]
@@ -160,7 +161,7 @@ q11$HS_tot_cum <- NULL
 
 #joint two datasets together
 q <- rbind(q, q11)
-rm(q11)
+#rm(q11)
 
 #fractional HS per age
 q <- q %>%
@@ -170,7 +171,7 @@ q <- q %>%
   arrange(int_op, HS) %>%
   filter(HS!=999) %>%
   ungroup() %>%
-  select(int_op, HS, HS_frac, group)
+  select(int_op, HS, HS_tot, HS_frac, group)
 
 
 #-------------------------------------------------------------------------------
@@ -187,6 +188,25 @@ int_ops <- int_ops[seq(1, length(int_ops), 2)]
 #constrain results to 
 q <- q[q$int_op %in% int_ops,]
 rm(int_ops)
+
+
+#-------------------------------------------------------------------------------
+# Calculate adjusted "Deceased fraction" as health state 12
+#-------------------------------------------------------------------------------
+
+q12 <- q11
+rm(q11)
+#q12[,"HS"] <- 12
+
+#re-assign variable HS_tot the cumulative total
+q12$HS_frac <- q12$HS_tot/n_sample
+
+#remove any waves not shown in final dataset
+q12 <- q12[q12$int_op<=max(q$int_op),]
+
+q12$group <- "Data"
+
+q12 <- q12[,c("int_op", "HS", "HS_frac", "group")]
 
 ################################################################################
 #                                                                              #
@@ -253,7 +273,7 @@ ylim_max <- ceiling(max(j[,1:11])*10)/10+0.1
 #State 1: GI I, CF 0
 #===============================================================================
 
-j1 <- cbind(j[,"int_op"], 1, j[,"State 1"], rep("Model",nrow(j)))
+j1 <- cbind(j[,"int_op"], 1, j[,"State 1"], rep("Markov trace",nrow(j)))
 colnames(j1) <- c("int_op", "HS", "HS_frac", "group")
 q1 <- q[q$HS == 1,]
 w1 <- rbind(q1,j1)
@@ -269,6 +289,7 @@ p1 <- ggplot(w1, aes(x=int_op, y=HS_frac, color = group)) +
   xlab("Years") + 
   ylab("Prevalence (%)") +
   theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
   ylim(0,ylim_max)
 p1
 
@@ -276,7 +297,7 @@ p1
 #State 2: GI I, CF 1
 #===============================================================================
 
-j2 <- cbind(j[,"int_op"], 2, j[,"State 2"], rep("Model",nrow(j)))
+j2 <- cbind(j[,"int_op"], 2, j[,"State 2"], rep("Markov trace",nrow(j)))
 colnames(j2) <- c("int_op", "HS", "HS_frac", "group")
 q2 <- q[q$HS == 2,]
 w2 <- rbind(q2,j2)
@@ -291,6 +312,7 @@ p2 <- ggplot(w2, aes(x=int_op, y=HS_frac, color = group)) +
   xlab("Years") + 
   ylab("Prevalence (%)") +
   theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
   ylim(0,ylim_max)
 p2
 
@@ -298,7 +320,7 @@ p2
 #State 3: GI II, CF 0
 #===============================================================================
 
-j3 <- cbind(j[,"int_op"], 3, j[,"State 3"], rep("Model",nrow(j)))
+j3 <- cbind(j[,"int_op"], 3, j[,"State 3"], rep("Markov trace",nrow(j)))
 colnames(j3) <- c("int_op", "HS", "HS_frac", "group")
 q3 <- q[q$HS == 3,]
 w3 <- rbind(q3,j3)
@@ -313,6 +335,7 @@ p3 <- ggplot(w3, aes(x=int_op, y=HS_frac, color = group)) +
   xlab("Years") + 
   ylab("Prevalence (%)") +
   theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
   ylim(0,ylim_max)
 p3
 
@@ -320,7 +343,7 @@ p3
 #State 4: GI II, CF 1
 #===============================================================================
 
-j4 <- cbind(j[,"int_op"], 4, j[,"State 4"], rep("Model",nrow(j)))
+j4 <- cbind(j[,"int_op"], 4, j[,"State 4"], rep("Markov trace",nrow(j)))
 colnames(j4) <- c("int_op", "HS", "HS_frac", "group")
 q4 <- q[q$HS == 4,]
 w4 <- rbind(q4,j4)
@@ -335,6 +358,7 @@ p4 <- ggplot(w4, aes(x=int_op, y=HS_frac, color = group)) +
   xlab("Years") + 
   ylab("Prevalence (%)") +
   theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
   ylim(0,ylim_max)
 p4
 
@@ -342,7 +366,7 @@ p4
 #State 5: GI III, CF 0
 #===============================================================================
 
-j5 <- cbind(j[,"int_op"], 5, j[,"State 5"], rep("Model",nrow(j)))
+j5 <- cbind(j[,"int_op"], 5, j[,"State 5"], rep("Markov trace",nrow(j)))
 colnames(j5) <- c("int_op", "HS", "HS_frac", "group")
 q5 <- q[q$HS == 5,]
 w5 <- rbind(q5,j5)
@@ -357,6 +381,7 @@ p5 <- ggplot(w5, aes(x=int_op, y=HS_frac, color = group)) +
   xlab("Years") + 
   ylab("Prevalence (%)") +
   theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
   ylim(0,ylim_max)
 p5
 
@@ -364,7 +389,7 @@ p5
 #State 6: GI III, CF I
 #===============================================================================
 
-j6 <- cbind(j[,"int_op"], 6, j[,"State 6"], rep("Model",nrow(j)))
+j6 <- cbind(j[,"int_op"], 6, j[,"State 6"], rep("Markov trace",nrow(j)))
 colnames(j6) <- c("int_op", "HS", "HS_frac", "group")
 q6 <- q[q$HS == 6,]
 w6 <- rbind(q6,j6)
@@ -379,6 +404,7 @@ p6 <- ggplot(w6, aes(x=int_op, y=HS_frac, color = group)) +
   xlab("Years") + 
   ylab("Prevalence (%)") +
   theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
   ylim(0,ylim_max)
 p6
 
@@ -386,7 +412,7 @@ p6
 #State 7: GI IV, CF 0
 #===============================================================================
 
-j7 <- cbind(j[,"int_op"], 7, j[,"State 7"], rep("Model",nrow(j)))
+j7 <- cbind(j[,"int_op"], 7, j[,"State 7"], rep("Markov trace",nrow(j)))
 colnames(j7) <- c("int_op", "HS", "HS_frac", "group")
 q7 <- q[q$HS == 7,]
 w7 <- rbind(q7,j7)
@@ -401,6 +427,7 @@ p7 <- ggplot(w7, aes(x=int_op, y=HS_frac, color = group)) +
   xlab("Years") + 
   ylab("Prevalence (%)") +
   theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
   ylim(0,ylim_max)
 p7
 
@@ -408,7 +435,7 @@ p7
 #State 8: GI IV, CF 1
 #===============================================================================
 
-j8 <- cbind(j[,"int_op"], 8, j[,"State 8"], rep("Model",nrow(j)))
+j8 <- cbind(j[,"int_op"], 8, j[,"State 8"], rep("Markov trace",nrow(j)))
 colnames(j8) <- c("int_op", "HS", "HS_frac", "group")
 q8 <- q[q$HS == 8,]
 w8 <- rbind(q8,j8)
@@ -423,6 +450,7 @@ p8 <- ggplot(w8, aes(x=int_op, y=HS_frac, color = group)) +
   xlab("Years") + 
   ylab("Prevalence (%)") +
   theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
   ylim(0,ylim_max)
 p8
 
@@ -430,7 +458,7 @@ p8
 #State 9: GI V, CF 0
 #===============================================================================
 
-j9 <- cbind(j[,"int_op"], 9, j[,"State 9"], rep("Model",nrow(j)))
+j9 <- cbind(j[,"int_op"], 9, j[,"State 9"], rep("Markov trace",nrow(j)))
 colnames(j9) <- c("int_op", "HS", "HS_frac", "group")
 q9 <- q[q$HS == 9,]
 w9 <- rbind(q9,j9)
@@ -445,6 +473,7 @@ p9 <- ggplot(w9, aes(x=int_op, y=HS_frac, color = group)) +
   xlab("Years") + 
   ylab("Prevalence (%)") +
   theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
   ylim(0,ylim_max)
 p9
 
@@ -452,7 +481,7 @@ p9
 #State 10: GI V, CF 1
 #===============================================================================
 
-j10 <- cbind(j[,"int_op"], 10, j[,"State 10"], rep("Model",nrow(j)))
+j10 <- cbind(j[,"int_op"], 10, j[,"State 10"], rep("Markov trace",nrow(j)))
 colnames(j10) <- c("int_op", "HS", "HS_frac", "group")
 q10 <- q[q$HS == 10,]
 w10 <- rbind(q10,j10)
@@ -467,6 +496,7 @@ p10 <- ggplot(w10, aes(x=int_op, y=HS_frac, color = group)) +
   xlab("Years") + 
   ylab("Prevalence (%)") +
   theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
   ylim(0,ylim_max)
 p10
 
@@ -474,22 +504,25 @@ p10
 #State 11: Death
 #===============================================================================
 
-j11 <- cbind(j[,"int_op"], 11, j[,"State 11"], rep("Model",nrow(j)))
+j11 <- cbind(j[,"int_op"], 11, j[,"State 11"], rep("Markov trace",nrow(j)))
 colnames(j11) <- c("int_op", "HS", "HS_frac", "group")
 q11 <- q[(q$HS == 11), ] 
-w11 <- rbind(q11,j11)
+w11 <- rbind(j11,q12)
+
 
 w11$group <- as.factor(w11$group)
 w11$HS_frac <- as.double(w11$HS_frac)
 w11$int_op <- as.double(w11$int_op)
 p11 <- ggplot(w11, aes(x=int_op, y=HS_frac, color = group)) +
   geom_line(aes(color=group), size = 1)+
-  geom_point(aes(color=group), size = 1) + 
-  ggtitle("Deceased") + 
-  xlab("Years") + 
+  geom_point(aes(color=group), size = 1) +
+  ggtitle("Deceased") +
+  xlab("Years") +
   ylab("Prevalence (%)") +
   theme(legend.position="bottom") +
-  ylim(0,ylim_max)
+  ylim(0,ylim_max) +
+  theme(legend.title=element_blank()) 
+  
 p11
 
 
@@ -500,8 +533,8 @@ p11
 agemin <- min(agex)
 agemax <- max(agex)
 
-chart_title <- paste("Cohort aged between ",agemin," and ",agemax," 
-                     in interview wave ",int_wavex, ", n = ", n_sample, 
+chart_title <- paste("Cohort aged between ",agemin," and ",agemax, 
+                     " in interview wave ",int_wavex, ", n = ", n_sample, 
                      sep = "", collapse = NULL)
 #Generate file name for plot
 chart_name <- paste("02_results/02_traces/HS_age",agemin,"_",agemax,"_int",
