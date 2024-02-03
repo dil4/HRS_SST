@@ -64,7 +64,7 @@ select <- dplyr::select
 # 1 - time elapsed from first interview
 # 2 - time elapsed from first-ever SHARE interview
 # 3 - time elapsed from 50th birthday
-t_scale <- 3
+t_scale <- 2
 
 ################################################################################
 #                                                                              #
