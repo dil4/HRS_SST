@@ -16,10 +16,11 @@ msm(formula = HS ~ years, subject = hhidpn, data = dataT,
                    REPORT = 1))))
 ```
 
-
-| **Formula = HS ~ years** | slkfdj |  
-| :---: | :---: |  
-| **GI I, CF 0**  | - |  
+| Arguments | Description | 
+| --- | --- | 
+| `Formula = HS ~ years` | state ~ time: A formula giving the vectors containing the observed states and the corresponding observation times. Observed states, named `HS` in the provided data frame, are numeric variables in the set 1, ..., 11, and defined as factors. The numeric variables represent the states in order of severity, i.e. (GI I, CF 0), (GI I, CF 1), (GI II, CF 0), (GI II, CF 1), (GI III, CF 0), (GI III, CF 1), (GI IV, CF 0), (GI IV, CF 1), (GI V, CF 0), (GI V, CF 1) and death. The times, termed `years` in the provided dataset, indicate different types of observation scheme described in obstype.|   
+| `subject = hhidpn` | Vector of subject identification numbers for the data specified by `formula`. The HRS ID, defined as `hhidpn` in the provided data frame, was used as subject identification.|  
+| `data = dataT` | The data frame prepared in 01_Segmentation in which to interpret the variables supplied in formula, subject, covariates, misccovariates, hcovariates, obstype and obstrue.|
 
 For example, what are the outcomes and predictors in the model? Are there any adjusting covariates? Is time included in the model?
 
